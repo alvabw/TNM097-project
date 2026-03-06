@@ -9,7 +9,7 @@ dbFolder = 'blocks2';
 
 
 %% READ ORIGINAL IMAGE
-orig = imread('original6.jpg');
+orig = imread('original5.jpg'); %lägg till en egen bild 
 
 %orig = im2double(orig);
 
@@ -20,7 +20,7 @@ imshow(orig);
 db = loadDatabase(dbFolder, 16);
 
 %% CREATE MOSAIC WITH FULL DATABASE
-sampleSize = 4;   % sampling size av bilden. denna måste ändras baserat på varje bild 
+sampleSize = 2;   % sampling size av bilden. denna måste ändras baserat på varje bild 
 result_full = createMosaic(orig, db, sampleSize);
 
 %% OPTIMIZE DATABASE (100 images)
@@ -30,7 +30,9 @@ result_100 = createMosaic(orig, db100, sampleSize);
 %% OPTIMIZE DATABASE (50 images)
 db50 = optimizeDatabase(db, 50);
 result_50 = createMosaic(orig, db50, sampleSize);
-
+%%  OPTIMIZE BY SPECIFIC IMAGE 
+db50_image = optimizeDatabaseForImage(orig, db, sampleSize, 50);
+result_image50 = createMosaic(orig, db50_image, sampleSize);
 
 %% SHOW RESULTS
 figure(1)
@@ -41,6 +43,8 @@ figure(3)
 imshow(result_100); title('100 images');
 figure(4)
 imshow(result_50); title('50 images');
+figure(5)
+imshow(result_image50); title('images optimized (50)');
 
 %% QUALITY METRICS
 fprintf("\nQUALITY METRICS\n");
@@ -48,3 +52,4 @@ fprintf("\nQUALITY METRICS\n");
 qualityMetrics(orig, result_full, "Full DB");
 qualityMetrics(orig, result_100, "100 images");
 qualityMetrics(orig, result_50, "50 images");
+qualityMetrics(orig, result_image50, "optimized 50 images");
